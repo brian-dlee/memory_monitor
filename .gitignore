@@ -1,0 +1,6 @@
+data/*
+images/*
+**/static/.webassets-cache
+*.pyc
+
+!.gitkeep

@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        {% assets "stylesheets" %}
+            <link rel="stylesheet" lang="text/css" href="{{ ASSET_URL }}" />
+        {% endassets %}
+    </head>
+    <body>
+        <label>
+            Process ID:
+            <input id="pidInput" value="" />
+        </label>
+        <label>
+            Start time:
+            <input id="startInput" value="" />
+        </label>
+        <label>
+            End time:
+            <input id="endInput" value="" />
+        </label>
+        <hr />
+        <img id="memUsageImage" src="" />
+        {% assets "javascript" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+    </body>
+</html>
