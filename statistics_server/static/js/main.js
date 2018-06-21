@@ -3,8 +3,8 @@ function refreshImage() {
 
     let src = `http://localhost:5000/get_plot?pid=${state.pid}&date=${new Date().valueOf()}`
 
-    if (state.start !== "") src += `start=${convertTime(state.start)}`;
-    if (state.end !== "") src += `end=${convertTime(state.end)}`;
+    if (state.start !== "") src += `&start=${convertTime(state.start)}`;
+    if (state.end !== "") src += `&end=${convertTime(state.end)}`;
 
     document.getElementById("memUsageImage").src = src;
 }

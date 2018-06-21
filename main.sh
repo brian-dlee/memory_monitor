@@ -3,7 +3,6 @@
 dir="$(dirname $0)"
 pid=$1
 start=$(date "+%s")
-drawpid=0
 watchpid=0
 
 trap stop INT
@@ -15,14 +14,7 @@ fi
 
 function stop {
     echo "Stopping"
-    kill $drawpid $watchpid
-}
-
-function plot_memory_usage {
-    while :; do
-        python "$dir/plot_memory_usage.py" "$dir/data/${pid}.txt" "$dir/${pid}_memory_usage.png"
-        sleep 5
-    done
+    kill $watchpid
 }
 
 function record_memory_usage {
@@ -43,16 +35,10 @@ function record_memory_usage {
     done
 }
 
-plot_memory_usage &
+record_memory_usage &
 watchpid=$!
 
-record_memory_usage &
-drawpid=$!
-
-echo "Started recorder ($watchpid) and plotter ($drawpid)"
-
-sleep 1
-open "$dir/images/${pid}_memory_usage.png"
+echo "Started recorder ($watchpid)"
 
 wait
 

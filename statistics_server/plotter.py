@@ -23,7 +23,7 @@ def generate_plot(pid, output_path, start=None, end=None):
             if end is not None and runtime_seconds > end:
                 continue
 
-            mem_mb = float(virt) / 1024 / 1024
+            mem_mb = float(real) / 1000
             runtime_minutes = runtime_seconds / 60
 
             x.append(runtime_minutes)
