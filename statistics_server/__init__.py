@@ -1,6 +1,7 @@
+import os
 import tempfile
 
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, send_file, jsonify
 from flask_assets import Environment, Bundle
 
 from plotter import generate_plot
@@ -19,19 +20,41 @@ assets.debug = app.debug
 
 @app.route("/get_plot")
 def get_plot():
+    pids = []
     start = None
     end = None
+
+    if request.args.has_key('pid'):
+        rawpid = request.args.get('pid')
+
+        if rawpid.find(','):
+            pids = rawpid.split(',')
+        else:
+            pids = [rawpid]
+
+    if request.args.has_key('pids'):
+        pids = request.args.has_key('pids')
+
+    if len(pids) == 0:
+        return "No PIDS or PID provided.", 400
 
     if request.args.has_key('start'):
         start = int(request.args.get('start'))
 
     if request.args.has_key('end'):
-        end = request.args.get('end')
+        end = int(request.args.get('end'))
 
     output = tempfile.NamedTemporaryFile('w', suffix=".png")
-    generate_plot(request.args.get('pid'), output.name, start=start, end=end)
+    generate_plot(pids, output.name, start=start, end=end)
 
     return send_file(output.name, mimetype='image/png')
+
+
+@app.route("/pids")
+def get_pids():
+    return jsonify({
+        "pids": [f.split('.')[0] for f in os.listdir(paths.DATA_DIR) if f.endswith('.txt')]
+    })
 
 
 @app.route("/")

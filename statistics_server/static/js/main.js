@@ -9,6 +9,13 @@ function refreshImage() {
     document.getElementById("memUsageImage").src = src;
 }
 
+function refreshPids() {
+    fetch('http://localhost:5000/pids')
+        .then(response => response.json())
+        .then(data => setState('availablePids', data.pids))
+        .then(() => console.info("PIDS", state.availablePids))
+}
+
 function convertTime(timeStr) {
     if (timeStr.length === 0) return '';
 
@@ -29,19 +36,18 @@ function convertTime(timeStr) {
 }
 
 function setState(field, value) {
-    state[field] = event.target.value;
+    state[field] = value;
 
     localStorage.setItem("state", JSON.stringify(state));
 }
 
 const state = {
+    availablePids: [],
     pid: '',
     start: '',
     end: '',
     ...JSON.parse(localStorage.getItem("state"))
 };
-
-setInterval(refreshImage, 2000);
 
 document.getElementById("pidInput").onchange = event => setState("pid", event.target.value);
 document.getElementById("pidInput").value = state.pid
@@ -51,3 +57,8 @@ document.getElementById("startInput").value = state.start
 
 document.getElementById("endInput").onchange = event => setState("end", event.target.value);
 document.getElementById("endInput").value = state.end
+
+setInterval(() => {
+    refreshPids();
+    refreshImage();
+}, 2000);
